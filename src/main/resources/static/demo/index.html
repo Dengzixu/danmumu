@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live-Danmaku demo</title>
+
+    <style>
+        .container {
+            /*width: 500px;*/
+            /*height: 1000px;*/
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+</div>
+
+
+</body>
+
+<script type="application/javascript">
+    const containerE = document.querySelector(".container");
+
+    if ("WebSocket" in window) {
+        const ws = new WebSocket("ws://localhost:9006"); //创建WebSocket连接
+
+        ws.onmessage = (event) => {
+            let data = JSON.parse(event.data);
+
+            console.log(data)
+
+            switch (data['bodyCommand']) {
+                case 'INTERACT_WORD': {
+                    const p = document.createElement('p')
+                    switch (data['content']['msg_type']) {
+                        case 1: {
+                            p.innerText = `欢迎 ${data['userInfo']['username']} 进入直播间`
+                            break;
+                        }
+                        case 2: {
+                            p.innerText = `感谢 ${data['userInfo']['username']} 关注直播间`
+                            break;
+                        }
+                        case 3: {
+                            p.innerText = `感谢 ${data['userInfo']['username']} 分享直播间`
+                            break;
+                        }
+                    }
+
+
+                    containerE.append(p)
+                    break;
+                }
+
+                case 'DANMU_MSG': {
+                    const p = document.createElement('p')
+                    p.innerText = `${data['userInfo']['username']} 说: ${data['content']['danmu']}`
+
+                    containerE.append(p)
+                }
+            }
+        }
+
+    } else {
+        console.log("您的浏览器不支持WebSocket");
+    }
+</script>
+</html>

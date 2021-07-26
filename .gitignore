@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### 忽略资源文件 ###
+src/main/resources/static/images/sticker/*
+!src/main/resources/static/images/sticker/.gitkeep
+
 ### STS ###
 .apt_generated
 .classpath

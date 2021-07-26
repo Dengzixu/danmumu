@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Danmaku Chat</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            /*margin-top: 50px;*/
+            /*margin-left: 50px;*/
+            /*margin: 10px;*/
+
+            /*border: red 1px solid;*/
+            /*width: 350px;*/
+            /*height: 500px;*/
+
+            max-width: 375px;
+
+            max-height: 812px;
+
+            transform: rotate(180deg);
+
+            overflow: hidden;
+        }
+
+        .chat {
+            margin-bottom: 10px;
+            margin-top: 10px;
+
+            transform: rotate(180deg)
+        }
+
+        .chat-default {
+
+        }
+
+        .chat-face {
+            width: 32px;
+            height: 32px;
+
+            border-radius: 50%;
+        }
+
+        .chat-head {
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+            align-items: flex-start;
+        }
+
+        .chat-username {
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 8px;
+        }
+
+        .chat-text {
+            margin-left: 40px;
+            margin-top: -10px;
+            padding: 10px;
+
+            display: inline-block;
+
+            background-color: #cecece;
+            border-radius: 5px;
+        }
+
+        .chat-sticker {
+            width: 100px;
+        }
+
+        .chat-right {
+            direction: rtl;
+        }
+
+        .chat-right .chat-text {
+            margin-right: 40px;
+
+            background-color: #b2e281;
+
+            direction: ltr;
+        }
+
+        .chat-right .chat-username {
+            margin-right: 8px;
+        }
+
+        .chat-label {
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .chat-label p {
+            display: inline-block;
+            padding: 3px 10px;
+            background-color: rgba(204, 204, 204, 1);
+            border-radius: 5px;
+            font-size: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!--    <div class="chat">-->
+    <!--        <div class="chat-head">-->
+    <!--            <img class="chat-face"-->
+    <!--                 src="data:image/jpg;base64,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"-->
+    <!--                 alt="face">-->
+    <!--            <h5 class="chat-username">too_long_name</h5>-->
+    <!--        </div>-->
+    <!--        <p class="chat-text">-->
+    <!--            这是一条测试弹幕-->
+    <!--        </p>-->
+    <!--    </div>-->
+
+    <!--    <div class="chat chat-right">-->
+    <!--        <div class="chat-head">-->
+    <!--            <img class="chat-face"-->
+    <!--                 src="data:image/jpg;base64,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"-->
+    <!--                 alt="face">-->
+    <!--            <h5 class="chat-username">too_long_name</h5>-->
+    <!--        </div>-->
+    <!--        <p class="chat-text">-->
+    <!--            这是一条测试弹幕-->
+    <!--        </p>-->
+    <!--    </div>-->
+
+    <!--    <div class="chat chat-right">-->
+    <!--        <div class="chat-head">-->
+    <!--            <img class="chat-face"-->
+    <!--                 src="data:image/jpg;base64,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"-->
+    <!--                 alt="face">-->
+    <!--            <h5 class="chat-username">too_long_name</h5>-->
+    <!--        </div>-->
+    <!--        <p class="chat-text">-->
+    <!--            <img class="chat-sticker" src="./images/sticker/1.gif" alt="sticker">-->
+    <!--        </p>-->
+    <!--    </div>-->
+
+    <!--    <div class="chat chat-label">-->
+    <!--        <p>too_long_name 进入直播间</p>-->
+    <!--    </div>-->
+</div>
+
+</body>
+<script type="application/javascript">
+    const DEBUG = true;
+
+    if ("WebSocket" in window) {
+        const ws = new WebSocket("ws://localhost:9006"); //创建WebSocket连接
+
+        ws.onmessage = (event) => {
+            let data = JSON.parse(event.data);
+
+            console.trace(data)
+
+            switch (data['bodyCommand']) {
+                case 'INTERACT_WORD': {
+                    renderChatLabel(data['userInfo']['username'], data['content']['msg_type'])
+                    break;
+                }
+                case 'DANMU_MSG': {
+                    renderChat(data['userInfo']['username'],
+                        data['userInfo']['face'] != null ? data['userInfo']['face'] : "../images/noface.jpg",
+                        data['content']['danmu'],
+                        data['userInfo']['uid'] === 4283693);
+                }
+            }
+        }
+
+        ws.onerror = () => {
+            renderChatLabel('', 4, '无法链接 Danmumu 服务器 ⚠')
+        }
+
+        ws.onclose = () => {
+            renderChatLabel('', 4, '与 Danmumu 服务器断开连接')
+        }
+    } else {
+        console.error("您的浏览器不支持 WebSocket");
+    }
+
+    if (DEBUG) {
+        renderChatLabel('too_long_name', 1);
+
+        renderChat('too_long_name', '../images/too_long_name.jpg', 'too_long_name 的测试弹幕！', true);
+
+        renderChatLabel('热心B站用户', 1);
+
+        renderChat('热心B站用户', '../images/noface.jpg', '主播太可爱了 推了推了！');
+
+        renderChatLabel('热心B站用户', 2);
+        renderChatLabel('热心B站用户', 3);
+
+        renderChat('too_long_name', '../images/too_long_name.jpg', '/face-wa', true);
+    }
+
+
+    function renderChat(username, face, danmu, self = false) {
+        switch (danmu) {
+            case '/face-1':
+                danmu = '<img class="chat-sticker" src="../images/sticker/1.gif" alt="sticker">';
+                break;
+            case '/face-wa':
+            case "/哇":
+                danmu = '<img class="chat-sticker" src="../images/sticker/wa.jpg" alt="sticker">';
+                break;
+            case '/抱抱':
+                danmu = '<img class="chat-sticker" src="../images/sticker/bao.gif" alt="sticker">';
+                break;
+            case '/叹气':
+                break;
+            case "/聪明":
+                danmu = '<img class="chat-sticker" src="../images/sticker/congming.jpg" alt="sticker">';
+        }
+
+        const chat = document.createElement('div')
+        chat.className = self ? 'chat chat-right' : 'chat chat-default';
+        chat.innerHTML = `
+            <div class="chat-head">
+                <img class="chat-face"
+                     src="${face}"
+                     alt="face"
+                     referrerpolicy="no-referrer">
+                <h5 class="chat-username">${username}</h5>
+            </div>
+            <p class="chat-text">
+                ${danmu}
+            </p>
+        `
+
+        appendToContainer(chat);
+    }
+
+    function renderChatLabel(username, msgType, msg = '') {
+        const chat = document.createElement('div')
+        chat.className = 'chat chat-label'
+
+        let message = '';
+        switch (msgType) {
+            case 1:
+                message = `欢迎 ${username} 进入直播间 🎉`
+                break;
+            case 2:
+                message = `感谢 ${username} 关注直播间 ♥`
+                break;
+            case 3:
+                message = `感谢 ${username} 分享直播间 ♥`
+                break;
+            default:
+                message = `${msg}`
+        }
+
+        chat.innerHTML = `<p>${message}</p>`
+
+        appendToContainer(chat)
+    }
+
+    function appendToContainer(html) {
+        const container = document.querySelector(".container");
+
+        while (container.children.length > 20) {
+            container.removeChild(container.lastChild)
+        }
+
+        container.insertBefore(html, container.firstChild)
+    }
+</script>
+</html>
